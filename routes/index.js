@@ -4,6 +4,10 @@ const router = express.Router();
 const clientesController = require('../controllers/clientesController');
 const productosController = require('../controllers/productosController');
 const pedidosController = require('../controllers/pedidosController');
+const usuariosController = require('../controllers/usuariosController');
+
+// middleware para proteger las rutas
+const auth = require('../middlewares/auth');
 
 
 module.exports = function() {
@@ -14,10 +18,15 @@ module.exports = function() {
   
   
     //Agrega nuevos clientes via post
-    router.post('/clientes', clientesController.nuevoCliente);
+    router.post('/clientes',
+     clientesController.nuevoCliente
+     );
 
     //Obtener todos los clientes
-    router.get('/clientes', clientesController.mostrarClientes);
+    router.get('/clientes',
+     auth,
+     clientesController.mostrarClientes
+     );
 
     // muestra un cliente en especifico (ID)
     router.get('/clientes/:idCliente', clientesController.mostrarCliente);
@@ -65,7 +74,7 @@ module.exports = function() {
      -----------------------------------*/
 
      // Agrega nuevos pedidos
-     router.post('/pedidos', pedidosController.nuevoPedido);
+     router.post('/pedidos/nuevo/:idUsuario', pedidosController.nuevoPedido);
 
      // Mostrar todos los pedidos
      router.get('/pedidos', pedidosController.mostrarPedidos);
@@ -78,6 +87,17 @@ module.exports = function() {
 
      // Eliminar pedidos
      router.delete('/pedidos/:idPedido', pedidosController.eliminarPedido);
+
+       /**----------------------------------
+     *            USUARIOS
+     -----------------------------------*/
+     router.post('/crear-cuenta',
+      usuariosController.registrarUsuario
+     );
+
+     router.post('/iniciar-sesion',
+        usuariosController.autenticarUsuario
+     );
 
 
 
