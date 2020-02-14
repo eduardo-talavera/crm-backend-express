@@ -17,8 +17,11 @@ mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true
 });
 
+
 // creando el servidor
 const app = express();
+
+app.use(express.static('uploads'));
 
 // Habilitar bodyParser
 app.use(bodyParser.json());
@@ -45,12 +48,15 @@ app.use(cors(corsOptions));
 app.use('/', routes());
 
 // carpeta publica
-app.use(express.static('uploads'));
+
 
 const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 7000;
 
 // iniciar app
 app.listen(port, host, () => {
-    console.log('El servidor esta funcionando');
+    console.log('El servidor esta funcionando en el puerto:', port);
+    
+    console.log(process.env.DB_URL);
+    console.log(process.env.FRONTEND_URL);
 })
