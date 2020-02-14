@@ -4,13 +4,15 @@
   "description": "Aprendiendo a crear REST APIs",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.js"
+    "dev": "nodemon ./index.js",
+    "start": "node ./index.js"
   },
   "author": "Edgar Eduardo Talavera Contreras",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.7",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.4",
