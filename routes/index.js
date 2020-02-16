@@ -82,7 +82,6 @@ module.exports = function() {
 
     // Busqueda de productos
     router.post('/productos/busqueda/:query',
-      auth,
       productosController.buscarProducto);
 
 
@@ -119,7 +118,6 @@ module.exports = function() {
      *            USUARIOS
      -----------------------------------*/
      router.post('/crear-cuenta',
-      auth,
       usuariosController.registrarUsuario
      );
 

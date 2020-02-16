@@ -148,7 +148,6 @@ exports.buscarProducto = async (req, res, next) => {
         const producto = await Productos.find({ nombre: new RegExp(query,'i') });
         res.json(producto);
     } catch (error) {
-        console.log(error);
         next();
     }
 }
