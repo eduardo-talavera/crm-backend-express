@@ -6,7 +6,7 @@ const fs = require('fs'); // ya viene con node y sirve para borrar archivos
 const configuracionMulter = {
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, cb) => {
-            cb(null, __dirname+'../../uploads');
+            cb(null, __dirname + '/../uploads/');
         },
         filename: (req, file, cb) => {
             const extension = file.mimetype.split('/')[1];
