@@ -27,7 +27,7 @@ exports.mostrarClientes = async (req, res, next) => {
         const clientes = await Clientes.find({});
         res.json(clientes);
     } catch (error) {
-        console.log(error);
+        console.log('ESTE ES EL ERROR MEN:  ',error);
         next();
     }
 
