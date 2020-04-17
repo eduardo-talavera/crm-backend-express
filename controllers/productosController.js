@@ -52,7 +52,8 @@ exports.nuevoProducto = async (req, res, next) => {
         await producto.save();
         res.json({ mensaje : 'el producto ha sido agregado'});
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        res.send(error);
         next();
     }
 }
