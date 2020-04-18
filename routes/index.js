@@ -53,7 +53,6 @@ module.exports = function() {
 
     // Nuevos productos 
     router.post('/productos',
-            auth,
             productosController.subirArchivo,
             productosController.nuevoProducto
     );
