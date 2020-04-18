@@ -14,8 +14,14 @@ const cors = require('cors');
 // conectar mongo
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_URL, {
+    useUnifiedTopology: true,
     useNewUrlParser: true
 });
+
+mongoose.connection.on('error', (error) => {
+    console.log(error);
+})
+
 
 
 // creando el servidor
