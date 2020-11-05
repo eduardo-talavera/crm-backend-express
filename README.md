@@ -49,4 +49,5 @@ db.usuarios.insert({
 })
 ```
 Ahora lo que sigue es clonar el frontend de la aplicacion y configurarlo para ello visita la siguiente dirección
+<br>
 <a href="https://github.com/eduardo-talavera-dev/crm_frontend_react">CRM Frontend</a>
