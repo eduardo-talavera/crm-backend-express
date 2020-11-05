@@ -20,9 +20,10 @@
 
 ## Archivo variables.env
 El archivo debe contener las siguientes variables
-- PORT: Puerto en el cual levantar el servicio.
+- PORT: Puerto en el cual levantar el servicio, si no se agrega por default corre en el puerto 7000.
 - DB_URL: Ruta de de la base de datos, si la base de datos se crea en local no require contraseña
 - HOST: Dirección donde se aloja la app
+- FRONTEND_URL: Direccion donde se aloja el cliente de la app 
 
 Ejemplo:
 
@@ -30,6 +31,7 @@ Ejemplo:
 
   PORT=4000
   DB_URL=mongodb://localhost/crm-db
+  FRONTEND_URL=http://localhost:3000
   HOST=localhost
 ```
 
@@ -46,3 +48,5 @@ db.usuarios.insert({
   password: '123123',
 })
 ```
+Ahora lo que sigue es clonar el frontend de la aplicacion y configurarlo para ello visita la siguiente dirección
+<a href="https://github.com/eduardo-talavera-dev/crm_frontend_react">CRM Frontend</a>
