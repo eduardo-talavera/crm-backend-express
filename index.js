@@ -15,7 +15,8 @@ const cors = require('cors');
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_URL, {
     useUnifiedTopology: true,
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useCreateIndex: true
 });
 
 mongoose.connection.on('error', (error) => {
