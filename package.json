@@ -1,7 +1,7 @@
 {
   "name": "restapisnode",
   "version": "1.0.0",
-  "description": "Aprendiendo a crear REST APIs",
+  "description": "REST APIs",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./index.js",

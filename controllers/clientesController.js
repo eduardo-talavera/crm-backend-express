@@ -1,11 +1,11 @@
 const Clientes = require('../models/Clientes');
 
 
-
-
 // Agrega un nuevo cliente
 exports.nuevoCliente = async (req, res,nrxt) => {
     const cliente = new Clientes(req.body);
+    console.log(cliente.nombre);
+    console.log(cliente.empresa);
 
     try {
         // Almacenar el registro
