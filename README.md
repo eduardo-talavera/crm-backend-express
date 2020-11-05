@@ -1,18 +1,18 @@
 # CRM Backend
 
-## Requerimientos 
+## Requerimientos 📄
 - Node >= 12.8
 - Mongo >= 4.2.2
 - Editor de codigo
 
 
-## Instalación
+## Instalación 📦
 - Clonar el repositorio
 - Instalar las dependencias con `npm install`
 - Crear el archivo con las variables de entorno en la raíz del proyecto y nombrarlo como "variables.env"
 - Agregar una cuenta de administrador
 
-## Ejecución
+## Ejecución 🧪
 - Desarrollo: `npm run dev`
 - Producción: `npm run start`
 
@@ -35,7 +35,7 @@ Ejemplo:
   HOST=localhost
 ```
 
-## Agregar cuentas de administrador
+## Agregar cuentas de administrador ✔️
 Esto se debe hacer desde la terminal insertando un objeto a la colección `usuarios` con las propiedades email, nombre y password 
 Ejemplo:
 
