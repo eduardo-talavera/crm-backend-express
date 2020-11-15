@@ -35,19 +35,6 @@ Ejemplo:
   HOST=localhost
 ```
 
-## Agregar cuentas de administrador ✔️
-Esto se debe hacer desde la terminal insertando un objeto a la colección `usuarios` con las propiedades email, nombre y password 
-Ejemplo:
-
-```bash
-mongo
-use crm-db
-db.usuarios.insert({
-  email: 'admin@mail.com',
-  nombre: 'Administrador',
-  password: '123123',
-})
-```
-Ahora lo que sigue es clonar el frontend de la aplicacion y configurarlo para ello visita el siguiente enlace
+Ahora que todo está listo lo que sigue es descargar y configurar el cliente de la aplicacion para ello visita el siguiente enlace
 <br>
 <a href="https://github.com/eduardo-talavera-dev/crm_frontend_react">CRM Frontend</a>
