@@ -10,13 +10,11 @@
 - Clonar el repositorio
 - Instalar las dependencias con `npm install`
 - Crear el archivo con las variables de entorno en la raíz del proyecto y nombrarlo como "variables.env"
-- Agregar una cuenta de administrador
 
 ## Ejecución 🧪
 - Desarrollo: `npm run dev`
 - Producción: `npm run start`
 
-> La única diferencia es que con el primero el servidor se reinicia automáticamente al guardar cambios.
 
 ## Archivo variables.env
 El archivo debe contener las siguientes variables
