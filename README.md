@@ -35,6 +35,5 @@ Ejemplo:
   HOST=localhost
 ```
 
-Ahora que todo está listo lo que sigue es descargar y configurar el cliente de la aplicacion para ello visita el siguiente enlace
-<br>
+Ahora que todo está listo lo que sigue es descargar y configurar el cliente de la aplicacion para ello visita el siguiente enlace: 
 <a href="https://github.com/eduardo-talavera-dev/crm_frontend_react">CRM Frontend</a>
