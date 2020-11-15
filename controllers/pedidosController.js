@@ -38,7 +38,6 @@ exports.mostrarPedido = async (req, res, next) => {
         res.json( { mensaje : 'Ese pedido no existe' } );
         return next();
     }
-
     // Mostrar el pedido
    res.json(pedido);
 }

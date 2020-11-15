@@ -1,4 +1,5 @@
 const Productos = require('../models/Productos');
+const Pedidos = require('../models/Pedidos');
 const multer = require('multer');
 const shortid = require('shortid');
 const fs = require('fs'); // ya viene con node y sirve para borrar archivos
@@ -115,25 +116,59 @@ exports.actualizarProducto = async (req, res, next) => {
 
 // Elimina un producto via id
 exports.eliminarProducto = async (req, res, next) => {
+
     try {
 
-        const imgProducto = await Productos.findById(req.params.idProducto);
+        const { idProducto } = req.params;
+        
+        const pedidos = await Pedidos.find().populate({
+            path: 'pedido.producto',
+            model: 'Productos'
+        });
 
-        if (imgProducto.imagen) {
-            
-            const imgProductoPath = __dirname + `../../uploads/${imgProducto.imagen}`;
+        let issetProduct = false;
 
-            // eliminar archivo con filesystem
-            fs.unlink(imgProductoPath, (error) => {
-                if (error) {
-                    console.log(error);
+        pedidos.forEach(pedido => {
+            pedido.pedido.forEach(product => {
+                if(product._id == idProducto) {
+                    issetProduct = true;
+                    return;
                 }
-                return;
             })
-        }
+            if (issetProduct) return; 
+        });
 
-        await Productos.findOneAndDelete({_id: req.params.idProducto});
-        res.json({mensaje: 'El producto ha sido eliminado'});
+
+        if (!issetProduct) {
+
+            const imgProducto = await Productos.findById(idProducto);
+
+            if (imgProducto.imagen) {
+                
+                const imgProductoPath = __dirname + `../../uploads/${imgProducto.imagen}`;
+    
+                // eliminar archivo con filesystem
+                fs.unlink(imgProductoPath, (error) => {
+                    if (error) {
+                        console.log(error);
+                    }
+                    return;
+                })
+            }
+    
+            await Productos.findOneAndDelete({_id: idProducto});
+            res.json({
+                type: 'success',
+                mensaje: 'El producto ha sido eliminado'
+            });   
+                     
+        } else {
+            res.json({
+                type: 'warning',
+                mensaje: 'Existen pedidos que incluyen este producto'
+            });
+        }
+       
     } catch (error) {
         console.log(error);
         next();

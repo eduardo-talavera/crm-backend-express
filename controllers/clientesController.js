@@ -1,12 +1,10 @@
 const Clientes = require('../models/Clientes');
+const Pedidos = require('../models/Pedidos');
 
 
 // Agrega un nuevo cliente
 exports.nuevoCliente = async (req, res,nrxt) => {
     const cliente = new Clientes(req.body);
-    console.log(cliente.nombre);
-    console.log(cliente.empresa);
-
     try {
         // Almacenar el registro
         await cliente.save();
@@ -65,9 +63,35 @@ exports.actualizarCliente = async (req, res, next) => {
 
 // Eliminar Cliente por su id
 exports.eliminarCliente = async (req, res, next) => {
+
     try {
-        await Clientes.findOneAndDelete({_id : req.params.idCliente});
-        res.json({ mensaje : 'El cliente ha sido eliminado correctamente'});
+
+        const pedidos = await Pedidos.find();
+        const { idCliente } = req.params;
+
+        let issetClient = false;
+
+        pedidos.forEach(pedido => {
+            if(pedido.cliente == idCliente) {
+                issetClient = true;
+                return;
+            }
+        });
+
+        if(!issetClient){
+            await Clientes.findOneAndDelete({_id : idCliente});
+            res.json({
+                type:'success',
+                mensaje : 'El cliente ha sido eliminado correctamente'
+            });
+        } else {
+            res.json({
+                type:'warning',
+                mensaje : 'Existen pedidos que incluyen este cliente'
+            });
+        }
+
+
     } catch (error) {
         console.log(error);
         next();
