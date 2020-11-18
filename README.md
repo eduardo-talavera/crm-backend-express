@@ -1,4 +1,4 @@
-# CRM Backend
+# CRM Backend Express
 
 ## Requerimientos 📄
 - Node >= 12.8
@@ -32,6 +32,5 @@ Ejemplo:
   FRONTEND_URL=http://localhost:3000
   HOST=localhost
 ```
-
-Ahora que todo está listo lo que sigue es descargar y configurar el cliente de la aplicacion para ello visita el siguiente enlace: 
-<a href="https://github.com/eduardo-talavera-dev/crm_frontend_react">CRM Frontend</a>
+Para clonar o descargar el frontend de la app haga click en el siguiente enlace: 
+<a href="https://github.com/eduardo-talavera-dev/crm_frontend_react">CRM Frontend React</a>
