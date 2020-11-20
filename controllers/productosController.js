@@ -83,6 +83,17 @@ exports.mostrarProducto = async (req, res , next) => {
     res.json(producto);
 }
 
+const deleteImage = (imageName) => {
+  const imgProductoPath = __dirname + `../../uploads/${imageName}`;
+  // eliminar archivo con filesystem
+  fs.unlink(imgProductoPath, (error) => {
+    if (error) {
+      console.log(error);
+    }
+    return;
+  });
+};
+
 
 // Actualizar Producto via id
 exports.actualizarProducto = async (req, res, next) => {
@@ -92,9 +103,14 @@ exports.actualizarProducto = async (req, res, next) => {
       // construir un nuevo producto
       let nuevoProducto = req.body;
 
+      console.log(nuevoProducto);
+
+      
+
       // verificar si se actualiza la imagen
       if (req.file) {
-          nuevoProducto.imagen = req.file.filename;
+         deleteImage(nuevoProducto.previousImage); 
+         nuevoProducto.imagen = req.file.filename;
       } else {
           let productoAnterior = await Productos.findById(req.params.idProducto);
           nuevoProducto.imagen = productoAnterior.imagen;
