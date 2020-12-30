@@ -1,87 +1,83 @@
-const Productos = require('../models/Productos');
-const Pedidos = require('../models/Pedidos');
-const multer = require('multer');
-const shortid = require('shortid');
-const fs = require('fs'); // ya viene con node y sirve para borrar archivos
+const Productos = require("../models/Productos");
+const Pedidos = require("../models/Pedidos");
+const multer = require("multer");
+const shortid = require("shortid");
+const fs = require("fs"); // ya viene con node y sirve para borrar archivos
 
 const configuracionMulter = {
-    storage: fileStorage = multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, __dirname + '../../uploads/');
-        },
-        filename: (req, file, cb) => {
-            const extension = file.mimetype.split('/')[1];
-            cb(null, `${shortid.generate()}.${extension}`);
-        }
-    }),
-    fileFilter(req, file, cb ) {
-        if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-            cb(null, true);
-        } else {
-            cb(new Error('Formato no valido'))
-        }
+  storage: (fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, __dirname + "../../uploads/");
     },
-}
+    filename: (req, file, cb) => {
+      const extension = file.mimetype.split("/")[1];
+      cb(null, `${shortid.generate()}.${extension}`);
+    },
+  })),
+  fileFilter(req, file, cb) {
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+      cb(null, true);
+    } else {
+      cb(new Error("Formato no valido"));
+    }
+  },
+};
 
 // Pasar la configuracion y el campo
-const upload = multer(configuracionMulter).single('imagen');
-
+const upload = multer(configuracionMulter).single("imagen");
 
 // Sube un archivo
 exports.subirArchivo = (req, res, next) => {
-    upload(req, res, function(error) {
-        if (error) {
-            res.json({ mensaje: error})
-        }
+  upload(req, res, function (error) {
+    if (error) {
+      res.json({ mensaje: error });
+    }
 
-        return next();
-    })
-}
-
+    return next();
+  });
+};
 
 // Agrega nuevos productos
 exports.nuevoProducto = async (req, res, next) => {
-    const producto = new Productos(req.body);
+  const producto = new Productos(req.body);
 
-    try {
-
-
-        if (req.file.filename) {
-            producto.imagen = req.file.filename;
-        }
-
-        await producto.save();
-        res.json({ mensaje : 'el producto ha sido agregado'});
-    } catch (error) {
-        console.log(error);
-        res.send(error);
-        next();
+  try {
+    if (req.file.filename) {
+      producto.imagen = req.file.filename;
     }
-}
 
-// Muestra todos los productos 
-exports.mostrarProductos = async (req, res ,next) => {
-    try {
-        const productos = await Productos.find({});
-        res.json(productos);
-    } catch (error) {
-        console.log(error);
-        next();
-    }
-}
+    await producto.save();
+    res.json({ mensaje: "el producto ha sido agregado" });
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+    next();
+  }
+};
+
+// Muestra todos los productos
+exports.mostrarProductos = async (req, res, next) => {
+  try {
+    const productos = await Productos.find({});
+    res.json(productos);
+  } catch (error) {
+    console.log(error);
+    next();
+  }
+};
 
 // Muestra un producto por su id
-exports.mostrarProducto = async (req, res , next) => {
-    const producto = await Productos.findById(req.params.idProducto);
+exports.mostrarProducto = async (req, res, next) => {
+  const producto = await Productos.findById(req.params.idProducto);
 
-    if (!producto) {
-        res.json( { mensaje : 'Ese producto no existe' } );
-        return next();
-    }
+  if (!producto) {
+    res.json({ mensaje: "Ese producto no existe" });
+    return next();
+  }
 
-    // mostrar Producto
-    res.json(producto);
-}
+  // mostrar Producto
+  res.json(producto);
+};
 
 const deleteImage = (imageName) => {
   const imgProductoPath = __dirname + `../../uploads/${imageName}`;
@@ -94,112 +90,100 @@ const deleteImage = (imageName) => {
   });
 };
 
-
 // Actualizar Producto via id
 exports.actualizarProducto = async (req, res, next) => {
-    try {
+  try {
+    // construir un nuevo producto
+    let nuevoProducto = req.body;
 
+    console.log(nuevoProducto);
 
-      // construir un nuevo producto
-      let nuevoProducto = req.body;
-
-      console.log(nuevoProducto);
-
-      
-
-      // verificar si se actualiza la imagen
-      if (req.file) {
-         deleteImage(nuevoProducto.previousImage); 
-         nuevoProducto.imagen = req.file.filename;
-      } else {
-          let productoAnterior = await Productos.findById(req.params.idProducto);
-          nuevoProducto.imagen = productoAnterior.imagen;
-      }
-
-
-
-      let producto  = await Productos.findOneAndUpdate({_id:
-         req.params.idProducto}, nuevoProducto, {
-         new : true// retornando nuevo valor
-       });
-       res.json(producto);
-    } catch (error) {
-        console.log(error);
-        next();
+    // verificar si se actualiza la imagen
+    if (req.file) {
+      deleteImage(nuevoProducto.previousImage);
+      nuevoProducto.imagen = req.file.filename;
+    } else {
+      let productoAnterior = await Productos.findById(req.params.idProducto);
+      nuevoProducto.imagen = productoAnterior.imagen;
     }
-}
 
+    let producto = await Productos.findOneAndUpdate(
+      { _id: req.params.idProducto },
+      nuevoProducto,
+      {
+        new: true, // retornando nuevo valor
+      }
+    );
+    res.json(producto);
+  } catch (error) {
+    console.log(error);
+    next();
+  }
+};
 
 // Elimina un producto via id
 exports.eliminarProducto = async (req, res, next) => {
+  try {
+    const { idProducto } = req.params;
 
-    try {
+    const pedidos = await Pedidos.find().populate({
+      path: "pedido.producto",
+      model: "Productos",
+    });
 
-        const { idProducto } = req.params;
-        
-        const pedidos = await Pedidos.find().populate({
-            path: 'pedido.producto',
-            model: 'Productos'
-        });
+    let issetProduct = false;
 
-        let issetProduct = false;
-
-        pedidos.forEach(pedido => {
-            pedido.pedido.forEach(product => {
-                if(product._id == idProducto) {
-                    issetProduct = true;
-                    return;
-                }
-            })
-            if (issetProduct) return; 
-        });
-
-
-        if (!issetProduct) {
-
-            const imgProducto = await Productos.findById(idProducto);
-
-            if (imgProducto.imagen) {
-                
-                const imgProductoPath = __dirname + `../../uploads/${imgProducto.imagen}`;
-    
-                // eliminar archivo con filesystem
-                fs.unlink(imgProductoPath, (error) => {
-                    if (error) {
-                        console.log(error);
-                    }
-                    return;
-                })
-            }
-    
-            await Productos.findOneAndDelete({_id: idProducto});
-            res.json({
-                type: 'success',
-                mensaje: 'El producto ha sido eliminado'
-            });   
-                     
-        } else {
-            res.json({
-                type: 'warning',
-                mensaje: 'Existen pedidos que incluyen este producto'
-            });
+    pedidos.forEach((pedido) => {
+      pedido.pedido.forEach((product) => {
+        if (product._id == idProducto) {
+          issetProduct = true;
+          return;
         }
-       
-    } catch (error) {
-        console.log(error);
-        next();
-    }
-}
+      });
+      if (issetProduct) return;
+    });
 
+    if (!issetProduct) {
+      const imgProducto = await Productos.findById(idProducto);
+
+      if (imgProducto.imagen) {
+        const imgProductoPath =
+          __dirname + `../../uploads/${imgProducto.imagen}`;
+
+        // eliminar archivo con filesystem
+        fs.unlink(imgProductoPath, (error) => {
+          if (error) {
+            console.log(error);
+          }
+          return;
+        });
+      }
+
+      await Productos.findOneAndDelete({ _id: idProducto });
+      res.json({
+        type: "success",
+        mensaje: "El producto ha sido eliminado",
+      });
+    } else {
+      res.json({
+        type: "warning",
+        mensaje: "Existen pedidos que incluyen este producto",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    next();
+  }
+};
 
 // Busca productos en base a query
 exports.buscarProducto = async (req, res, next) => {
-    try {
-        // Obtener el query
-        const { query } = req.params;
-        const producto = await Productos.find({ nombre: new RegExp(query,'i') });
-        res.json(producto);
-    } catch (error) {
-        next();
-    }
-}
+  try {
+    // Obtener el query
+    const { query } = req.params;
+    const producto = await Productos.find({ nombre: new RegExp(query, "i") });
+    res.json(producto);
+  } catch (error) {
+    next();
+  }
+};

@@ -14,6 +14,10 @@ const ClienteSchema =  new Schema({
          type: String,
          trim: true
      },
+     rol: {
+        type: String,
+        trim: true
+     },
      email: {
         type: String,
         unique: true,
